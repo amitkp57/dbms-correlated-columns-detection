@@ -6,14 +6,13 @@ import google.auth
 import google.auth.transport.requests
 import requests
 
-DATA_PATH = f'{pathlib.Path(__file__).parent.parent}/data'
+DATA_PATH = f'{pathlib.Path(__file__).parent}/data'
 
 
 def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
     """
-    print(DATA_PATH)
     os.environ[
         'GOOGLE_APPLICATION_CREDENTIALS'] = f'{DATA_PATH}/amit-pradhan-compute-f61ddefef705.json'
 
