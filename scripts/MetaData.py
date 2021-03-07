@@ -1,8 +1,8 @@
 import json
 import pathlib
 
-import RESTUtil
-import Constants
+import scripts.RESTUtil as RESTUtil
+import scripts.Constants as Constants
 
 
 def get_datasets():
