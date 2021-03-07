@@ -1,2 +1,0 @@
-DATASET_SERVICE_URL = 'https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets?all=true'
-DATASET_TABLE_SERVICE_URL = 'https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets/%s/tables'
