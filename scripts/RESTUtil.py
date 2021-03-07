@@ -9,7 +9,8 @@ import requests
 DATA_PATH = f'{pathlib.Path(__file__).absolute().parent}/data'
 
 
-def get_auth_token(credential_path):
+def get_auth_token(credential_path=DATA_PATH):
+    print(credential_path)
     """
     Returns Goggle OAuth 2.0 access token
     """
