@@ -6,13 +6,15 @@ import google.auth
 import google.auth.transport.requests
 import requests
 
+DATA_PATH = f'{pathlib.Path().absolute().parent}/data'
+
 
 def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
     """
     os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{pathlib.Path().absolute().parent}/data/amit-pradhan-compute-f61ddefef705.json'
+        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{DATA_PATH}/amit-pradhan-compute-f61ddefef705.json'
 
     # getting the credentials and project details for gcp project
     credentials, your_project_id = google.auth.default(

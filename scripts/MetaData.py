@@ -4,7 +4,10 @@ import pathlib
 import scripts.RESTUtil as RESTUtil
 import scripts.Constants as Constants
 
+DATA_PATH = f'{pathlib.Path().absolute().parent}/data'
 
+
+# Run this file to regenerate meta-data files in the /data folder
 def get_datasets():
     """
     Get list of datasets from google bigquery public data
@@ -71,7 +74,7 @@ def save_locally(dir):
 
 
 def main():
-    save_locally(f'{pathlib.Path().absolute().parent}/data')
+    save_locally(DATA_PATH)
 
 
 if __name__ == '__main__':
