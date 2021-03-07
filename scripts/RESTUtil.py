@@ -6,16 +6,15 @@ import google.auth
 import google.auth.transport.requests
 import requests
 
-DATA_PATH = f'{pathlib.Path(__file__).absolute().parent}/data'
+DATA_PATH = f'{pathlib.Path().absolute().parent}/data'
 
 
-def get_auth_token(credential_path=DATA_PATH):
-    print(credential_path)
+def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
     """
     os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{DATA_PATH}/amit-pradhan-compute-f61ddefef705.json'
 
     # getting the credentials and project details for gcp project
     credentials, your_project_id = google.auth.default(
@@ -31,12 +30,12 @@ def get_auth_token(credential_path=DATA_PATH):
     return credentials.token  # prints toke
 
 
-def get(url, credential_path=DATA_PATH):
+def get(url):
     """
     Makes a REST GET call to the given url and returns response
     """
     params = {'key': 'AIzaSyDjMXUNSD1-1_oxT2hk5Ow4uaPg0IeCBck'}
-    bearer = get_auth_token(credential_path)
+    bearer = get_auth_token()
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8',
                'Authorization': 'Bearer ' + bearer}
     # print(url, headers)
@@ -47,8 +46,7 @@ def get(url, credential_path=DATA_PATH):
 
 def main():
     print(get(
-        'https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets?all=true',
-        f'{DATA_PATH}/amit-pradhan-compute-f61ddefef705.json'))
+        'https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets?all=true'))
 
 
 if __name__ == '__main__':
