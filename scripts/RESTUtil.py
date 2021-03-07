@@ -30,7 +30,7 @@ def get_auth_token(credential_path):
     return credentials.token  # prints toke
 
 
-def get(url, credential_path):
+def get(url, credential_path=DATA_PATH):
     """
     Makes a REST GET call to the given url and returns response
     """
