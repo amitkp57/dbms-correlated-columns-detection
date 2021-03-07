@@ -4,7 +4,7 @@ import pathlib
 import scripts.RESTUtil as RESTUtil
 import scripts.Constants as Constants
 
-DATA_PATH = f'{pathlib.Path().absolute().parent}/data'
+DATA_PATH = f'{pathlib.Path(__file__).absolute().parent}/data'
 
 
 # Run this file to regenerate meta-data files in the /data folder
