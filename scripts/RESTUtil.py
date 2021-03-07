@@ -13,6 +13,7 @@ def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
     """
+    print(DATA_PATH)
     os.environ[
         'GOOGLE_APPLICATION_CREDENTIALS'] = f'{DATA_PATH}/amit-pradhan-compute-f61ddefef705.json'
 
