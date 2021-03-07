@@ -12,22 +12,16 @@ def get_datasets():
     """
     response = RESTUtil.get(Constants.DATASET_LIST_SERVICE_URL)
     datasets = [dataset['id'] for dataset in response['datasets']]
-
-    with open(f'{pathlib.Path().absolute().parent}/data/datasets.txt',
-              'w') as file:
-        file.write('\n'.join(datasets))
-
     return datasets
 
 
-def get_tables():
+def get_tables(datasets_path):
     """
     Get list of tables
     @return:
     """
     tables = []
-    with open(f'{pathlib.Path().absolute().parent}/data/datasets.txt',
-              'r') as file:
+    with open(datasets_path, 'r') as file:
         for dataset in file:
             if any(dataset.startswith(prefix) for prefix in
                    ['bigquery-public-data:covid19', 'bigquery-public-data:geo_census']):
@@ -35,23 +29,17 @@ def get_tables():
                 response = RESTUtil.get(
                     Constants.DATASET_TABLE_LIST_SERVICE_URL % dataset_id)
                 tables.extend([table['id'] for table in response['tables']])
-
-    with open(f'{pathlib.Path().absolute().parent}/data/tables.txt',
-              'w') as file:
-        file.write('\n'.join(tables))
-
     return tables
 
 
-def get_table_columns():
+def get_table_columns(tables_path):
     """
     Get list of table columns
     @return:
     """
     tables = dict()
 
-    with open(f'{pathlib.Path().absolute().parent}/data/tables.txt',
-              'r') as file:
+    with open(tables_path, 'r') as file:
         for fully_qualified_table_name in file:
             fully_qualified_table_name = fully_qualified_table_name.lstrip().rstrip()
             splits = fully_qualified_table_name.split(':')[1].split('.')
@@ -60,18 +48,30 @@ def get_table_columns():
                 Constants.DATASET_TABLE_DETAILS_SERVICE_URL % (dataset, table))
             columns = response['schema']['fields']
             tables[fully_qualified_table_name] = columns
-
-    with open(f'{pathlib.Path().absolute().parent}/data/columns.json',
-              'w') as file:
-        json.dump(tables, file)
-
     return tables
 
 
+def save_locally(dir):
+    """
+    Saves datasets, tables and table columns to the given directory
+    @param dir:
+    """
+    datasets = get_datasets()
+    with open(f'{dir}/datasets.txt', 'w') as file:
+        file.write('\n'.join(datasets))
+
+    tables = get_tables(f'{dir}/datasets.txt')
+    with open(f'{dir}/tables.txt', 'w') as file:
+        file.write('\n'.join(tables))
+
+    table_columns = get_table_columns()
+    with open(f'{dir}/columns.json', 'w') as file:
+        json.dump(table_columns, file)
+    return
+
+
 def main():
-    # print(get_datasets())
-    # print(get_tables())
-    print(get_table_columns())
+    save_locally(f'{pathlib.Path().absolute().parent}/data')
 
 
 if __name__ == '__main__':
