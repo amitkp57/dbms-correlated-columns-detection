@@ -64,7 +64,7 @@ def save_locally(dir):
     with open(f'{dir}/tables.txt', 'w') as file:
         file.write('\n'.join(tables))
 
-    table_columns = get_table_columns()
+    table_columns = get_table_columns(f'{dir}/tables.txt')
     with open(f'{dir}/columns.json', 'w') as file:
         json.dump(table_columns, file)
     return
