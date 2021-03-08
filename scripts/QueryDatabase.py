@@ -1,7 +1,6 @@
 import json
+import os
 import pathlib
-
-DATA_PATH = f'{pathlib.Path(__file__).parent.parent}/data'
 
 
 def get_columns(limit):
@@ -11,8 +10,9 @@ def get_columns(limit):
     """
     table_columns = json.read()
 
+
 def main():
-    pass
+    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
 
 
 if __name__ == '__main__':

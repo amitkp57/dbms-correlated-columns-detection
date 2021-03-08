@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 
 import scripts.RESTUtil as RESTUtil
@@ -74,7 +75,8 @@ def save_locally(dir):
 
 
 def main():
-    save_locally(DATA_PATH)
+    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
+    save_locally(f'{os.environ["WORKING_DIRECTORY"]}/data')
 
 
 if __name__ == '__main__':
