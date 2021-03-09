@@ -13,7 +13,7 @@ def get_auth_token():
     Returns Goggle OAuth 2.0 access token
     """
     os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{os.environ["WORKING_DIRECTORY"]}/data/amit-pradhan-compute-f61ddefef705.json'
+        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{os.environ["WORKING_DIRECTORY"]}/data/amit-pradhan-compute-454461611dd4.json'
 
     # getting the credentials and project details for gcp project
     credentials, your_project_id = google.auth.default(

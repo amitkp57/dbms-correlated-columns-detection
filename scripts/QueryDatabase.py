@@ -1,9 +1,10 @@
 import json
 import os
 import pathlib
-
 # Util methods to query Google BigQuery
 from collections import defaultdict
+
+from google.cloud import bigquery
 
 # We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
@@ -58,11 +59,28 @@ def get_all_column_types():
     return output
 
 
+def get_column_values(table_name, column):
+    """
+    Returns the list of column values from the table
+    @param table_name:
+    @param column:
+    @return:
+    """
+    client = bigquery.Client()
+    query = f'''select {column} from {table_name}'''
+    results = client.query(query).result().to_dataframe().to_numpy().ravel()
+    return results
+
+
 def main():
     os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
+    os.environ[
+        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{os.environ["WORKING_DIRECTORY"]}/data/amit-pradhan-compute-454461611dd4.json'
+
     # print(get_columns(100))
     # print(get_all_column_types())
-    print(get_columns('STRING'))
+    # print(get_columns('STRING'))
+    print(len(get_column_values('bigquery-public-data.covid19_aha.hospital_beds', 'state_name')))
 
 
 if __name__ == '__main__':
