@@ -2,10 +2,8 @@ import json
 import os
 import pathlib
 
-import scripts.RESTUtil as RESTUtil
 import scripts.Constants as Constants
-
-DATA_PATH = f'{pathlib.Path(__file__).parent.parent}/data'
+import scripts.RESTUtil as RESTUtil
 
 
 # Run this file to regenerate meta-data files in the /data folder
@@ -28,7 +26,8 @@ def get_tables(datasets_path):
     with open(datasets_path, 'r') as file:
         for dataset in file:
             if any(dataset.startswith(prefix) for prefix in
-                   ['bigquery-public-data:covid19', 'bigquery-public-data:geo_census']):
+                   ['bigquery-public-data:covid19', 'bigquery-public-data:geo_census',
+                    'bigquery-public-data:new_york']):
                 dataset_id = dataset.split(':')[1].lstrip().rstrip()
                 response = RESTUtil.get(
                     Constants.DATASET_TABLE_LIST_SERVICE_URL % dataset_id)
@@ -70,7 +69,7 @@ def save_locally(dir):
 
     table_columns = get_table_columns(f'{dir}/tables.txt')
     with open(f'{dir}/columns.json', 'w') as file:
-        json.dump(table_columns, file)
+        json.dump(table_columns, file, indent=4, sort_keys=True)
     return
 
 

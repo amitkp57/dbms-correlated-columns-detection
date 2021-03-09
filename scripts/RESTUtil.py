@@ -6,9 +6,8 @@ import google.auth
 import google.auth.transport.requests
 import requests
 
-DATA_PATH = f'{pathlib.Path(__file__).parent}/data'
 
-
+# Util methods for making REST calls
 def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
