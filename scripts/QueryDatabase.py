@@ -6,6 +6,8 @@ from collections import defaultdict
 
 from google.cloud import bigquery
 
+client = bigquery.Client(project='amit-pradhan-compute')
+
 # We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
 
@@ -66,7 +68,6 @@ def get_column_values(table_name, column):
     @param column:
     @return:
     """
-    client = bigquery.Client()
     query = f'''select {column} from {table_name}'''
     results = client.query(query).result().to_dataframe().to_numpy().ravel()
     return results
