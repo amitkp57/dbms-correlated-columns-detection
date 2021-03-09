@@ -21,7 +21,7 @@ def get_columns(limit=10000):
     output = []
     for table, columns in table_columns.items():
         for column in columns:
-            output.append({'table': table, 'column': column['name']})
+            output.append({'table': table.replace(':', '.'), 'column': column['name']})
     return output[:limit]
 
 
@@ -41,7 +41,7 @@ def get_columns(column_type, limit=10000):
     for table, columns in table_columns.items():
         for column in columns:
             if column['type'] == column_type:
-                output.append({'table': table, 'column': column['name']})
+                output.append({'table': table.replace(':', '.'), 'column': column['name']})
     return output[:limit]
 
 
@@ -73,10 +73,6 @@ def get_column_values(table_name, column):
 
 
 def main():
-    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
-    os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{os.environ["WORKING_DIRECTORY"]}/data/amit-pradhan-compute-454461611dd4.json'
-
     # print(get_columns(100))
     # print(get_all_column_types())
     # print(get_columns('STRING'))
@@ -84,4 +80,7 @@ def main():
 
 
 if __name__ == '__main__':
+    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
+    os.environ[
+        'GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/public.DESKTOP-5H03UEQ/Documents/amit-pradhan-compute-23315413b3a3.json'
     main()

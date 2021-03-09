@@ -74,9 +74,9 @@ def save_locally(dir):
 
 
 def main():
-    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
     save_locally(f'{os.environ["WORKING_DIRECTORY"]}/data')
 
 
 if __name__ == '__main__':
+    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
     main()

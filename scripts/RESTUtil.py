@@ -12,9 +12,6 @@ def get_auth_token():
     """
     Returns Goggle OAuth 2.0 access token
     """
-    os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = f'{os.environ["WORKING_DIRECTORY"]}/data/amit-pradhan-compute-454461611dd4.json'
-
     # getting the credentials and project details for gcp project
     credentials, your_project_id = google.auth.default(
         scopes=['https://www.googleapis.com/auth/bigquery'])
@@ -44,10 +41,12 @@ def get(url):
 
 
 def main():
-    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
     print(get(
         'https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets?all=true'))
 
 
 if __name__ == '__main__':
+    os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
+    os.environ[
+        'GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/public.DESKTOP-5H03UEQ/Documents/amit-pradhan-compute-23315413b3a3.json'
     main()
