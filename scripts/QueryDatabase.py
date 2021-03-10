@@ -81,14 +81,25 @@ def get_all_column_types():
     return output
 
 
-def get_columns_values(table_name, columns):
+def get_columns_values(table_name, columns, sampling=0):
     """
     Returns the list of column values from the table
     @param table_name:
     @param column:
     @return:
     """
-    query = f'''select {",".join(columns)} from `{table_name}`'''
+    if sampling > 0:
+        # query row count
+        row_count = client.query('''
+            SELECT
+              COUNT(*) as total
+            FROM `%s`''' % table_name).to_dataframe().total[0]
+        if row_count > sampling:
+            query = f'''select {",".join(columns)} from `{table_name}` where RAND() < {sampling}/{row_count}'''
+        else:
+            query = f'''select {",".join(columns)} from `{table_name}`'''
+    else:
+        query = f'''select {",".join(columns)} from `{table_name}`'''
     results = client.query(query).result().to_dataframe().to_numpy(na_value=0).astype('float32').transpose()
     return results
 
