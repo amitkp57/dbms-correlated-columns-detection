@@ -1,12 +1,11 @@
+# Util methods to query Google BigQuery
+
 import json
 import os
 import pathlib
-# Util methods to query Google BigQuery
 from collections import defaultdict
 
 from google.cloud import bigquery
-
-client = bigquery.Client(project='amit-pradhan-compute')
 
 # We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
@@ -68,6 +67,7 @@ def get_column_values(table_name, column):
     @param column:
     @return:
     """
+    client = bigquery.Client(project='introdb-303217')
     query = f'''select {column} from {table_name}'''
     results = client.query(query).result().to_dataframe().to_numpy().ravel()
     return results
@@ -83,5 +83,5 @@ def main():
 if __name__ == '__main__':
     os.environ["WORKING_DIRECTORY"] = f'{pathlib.Path(__file__).parent.parent}'
     os.environ[
-        'GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/public.DESKTOP-5H03UEQ/Documents/amit-pradhan-compute-23315413b3a3.json'
+        'GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/public.DESKTOP-5H03UEQ/Documents/IntroDB-35dbe741f4c7.json'
     main()
