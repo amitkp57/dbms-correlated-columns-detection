@@ -49,7 +49,7 @@ def get_columns(column_type, limit=10000):
 
 def get_columns_exclude(column_type, limit=10000):
     """
-    Get the list of columns of the given type. Size of returned columns will be limited by given limit value.
+    Get the list of columns while excluding the given type. Size of returned columns will be limited by given limit value.
     @param column_type:
     @param limit:
     """
@@ -62,7 +62,7 @@ def get_columns_exclude(column_type, limit=10000):
     output = []
     for table, columns in table_columns.items():
         for column in columns:
-            if column['type'] != column_type:
+            if column['type'] != column_type and column['type'] in COLUMN_TYPES:
                 output.append({'table': table.replace(':', '.'), 'column': column['name']})
     return output[:limit]
 
