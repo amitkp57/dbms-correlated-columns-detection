@@ -3,7 +3,7 @@ import os
 import pathlib
 
 import numpy as np
-from datasketch import MinHashLSHForest, MinHash, MinHashLSH
+from datasketch import MinHashLSHForest, MinHash, MinHashLSH, LeanMinHash
 
 import scripts.QueryDatabase as queryDatabase
 
@@ -120,15 +120,54 @@ def calculate_jaccard_similarity(columns):
     return matrix
 
 
+def serialize_min_hash(columns):
+    """
+    Writes min hash values to local files
+    @param columns:
+    @return:
+    """
+    for column in columns:
+        values = queryDatabase.get_column_values(column['table'], column['column'])
+        tokens = tokenize(values)
+        minhash = MinHash(num_perm=NUM_PERM)
+        for token in tokens:
+            minhash.update(token.encode('utf8'))
+        leanMinHash = LeanMinHash(minhash)
+        buf = bytearray(leanMinHash.bytesize())
+        leanMinHash.serialize(buf)
+        with open(f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt',
+                  'wb') as file:
+            file.write(buf)
+    return
+
+
+def deserialize_minhash(column):
+    """
+    Deserializes minhash binary file for the given column and returns the minhash
+    @param column:
+    @return:
+    """
+    file_path = f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt'
+    if not os.path.isfile(file_path):
+        raise ValueError(f'Serialized file not found for {column["table"]}.{column["column"]}!')
+    with open(file_path, 'rb') as file:
+        minhash = LeanMinHash.deserialize(bytearray(file.read()))
+    return minhash
+
+
 def main():
     string_columns = queryDatabase.get_columns('STRING', limit=10)
-    forest = build_lsh_forest(string_columns)
-    lsh = build_minhash_lsh(string_columns, 0.7)
-    print(
-        f'top 10 similar columns to bigquery-public-data.covid19_aha.hospital_beds.state_name: '
-        f'{get_top_k(forest, "bigquery-public-data.covid19_aha.hospital_beds.state_name")}')
-    print()
-    print(calculate_jaccard_similarity(string_columns))
+    # forest = build_lsh_forest(string_columns)
+    # lsh = build_minhash_lsh(string_columns, 0.7)
+    # print(
+    #     f'top 10 similar columns to bigquery-public-data.covid19_aha.hospital_beds.state_name: '
+    #     f'{get_top_k(forest, "bigquery-public-data.covid19_aha.hospital_beds.state_name")}')
+    # print()
+    # print(calculate_jaccard_similarity(string_columns))
+    # serialize_min_hash(string_columns)
+    minhash1 = deserialize_minhash(string_columns[0])
+    minhash2 = deserialize_minhash(string_columns[1])
+    print(minhash1.jaccard(minhash2))
 
 
 if __name__ == '__main__':

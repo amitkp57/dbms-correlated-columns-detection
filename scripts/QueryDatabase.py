@@ -73,6 +73,7 @@ def get_column_values(table_name, column):
     return results
 
 
+
 def main():
     # print(get_columns(100))
     # print(get_all_column_types())
