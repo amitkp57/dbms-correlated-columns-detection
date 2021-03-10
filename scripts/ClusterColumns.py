@@ -120,13 +120,17 @@ def calculate_jaccard_similarity(columns):
     return matrix
 
 
-def serialize_min_hash(columns):
+def serialize_min_hash(columns, override=False):
     """
     Writes min hash values to local files
+    @param override:
     @param columns:
     @return:
     """
     for column in columns:
+        output_file = f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt'
+        if os.path.isfile(output_file) and not override:
+            continue
         values = queryDatabase.get_distnct_column_values(column['table'], column['column'])
         tokens = tokenize(values)
         minhash = MinHash(num_perm=NUM_PERM)
@@ -135,8 +139,7 @@ def serialize_min_hash(columns):
         leanMinHash = LeanMinHash(minhash)
         buf = bytearray(leanMinHash.bytesize())
         leanMinHash.serialize(buf)
-        with open(f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt',
-                  'wb') as file:
+        with open(output_file, 'wb') as file:
             file.write(buf)
             print(f'Serialization is complete for {column["table"]}.{column["column"]}.')
     return
