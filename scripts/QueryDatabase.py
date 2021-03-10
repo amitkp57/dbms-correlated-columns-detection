@@ -46,6 +46,26 @@ def get_columns(column_type, limit=10000):
     return output[:limit]
 
 
+def get_columns_exclude(column_type, limit=10000):
+    """
+    Get the list of columns while excluding the given type. Size of returned columns will be limited by given limit value.
+    @param column_type:
+    @param limit:
+    """
+    if column_type not in COLUMN_TYPES:
+        raise ValueError(f'{column_type} is not a valid type for correlation finding!')
+
+    with open(f'{os.environ["WORKING_DIRECTORY"]}/data/columns.json') as file:
+        table_columns = json.load(file)
+
+    output = []
+    for table, columns in table_columns.items():
+        for column in columns:
+            if column['type'] != column_type and column['type'] in COLUMN_TYPES:
+                output.append({'table': table.replace(':', '.'), 'column': column['name']})
+    return output[:limit]
+
+
 def get_all_column_types():
     """
     Return the distinct column types in the set of the tables
