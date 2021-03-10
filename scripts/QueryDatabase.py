@@ -8,7 +8,7 @@ from collections import defaultdict
 from google.cloud import bigquery
 
 # We will find correlations only among the below types of columns
-COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
+COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN', 'GEOGRAPHY']
 
 
 def get_columns(limit=10000):
