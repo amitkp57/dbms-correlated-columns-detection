@@ -106,12 +106,7 @@ def calculate_jaccard_similarity(columns):
     """
     minhash_list = []
     for column in columns:
-        values = queryDatabase.get_column_values(column['table'], column['column'])
-        tokens = tokenize(values)
-        minhash = MinHash(num_perm=NUM_PERM)
-        for token in tokens:
-            minhash.update(token.encode('utf8'))
-        minhash_list.append(minhash)
+        minhash_list.append(deserialize_minhash(column))
     n = len(columns)
     matrix = np.zeros((n, n))
     for i in range(n):
