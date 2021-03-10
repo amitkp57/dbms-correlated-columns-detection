@@ -73,6 +73,18 @@ def get_column_values(table_name, column):
     return results
 
 
+def get_distnct_column_values(table_name, column):
+    """
+    Returns the list of distinct column values from the table
+    @param table_name:
+    @param column:
+    @return:
+    """
+    client = bigquery.Client(project='introdb-303217')
+    query = f'''select DISTINCT {column} from {table_name}'''
+    results = client.query(query).result().to_dataframe().to_numpy().ravel()
+    return results
+
 
 def main():
     # print(get_columns(100))

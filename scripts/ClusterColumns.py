@@ -18,12 +18,12 @@ def tokenize(values):
     @param values:
     @return:
     """
-    tokens = []
+    tokens = set()
     # nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser', 'ner'])
     for value in values:
         if value is not None:
             # tokens.extend(list(nlp(value)))
-            tokens.extend(value.lower().split())
+            tokens.update(value.lower().split())
     return tokens
 
 
@@ -127,7 +127,7 @@ def serialize_min_hash(columns):
     @return:
     """
     for column in columns:
-        values = queryDatabase.get_column_values(column['table'], column['column'])
+        values = queryDatabase.get_distnct_column_values(column['table'], column['column'])
         tokens = tokenize(values)
         minhash = MinHash(num_perm=NUM_PERM)
         for token in tokens:
@@ -165,7 +165,7 @@ def main():
     #     f'{get_top_k(forest, "bigquery-public-data.covid19_aha.hospital_beds.state_name")}')
     # print()
     # print(calculate_jaccard_similarity(string_columns))
-    # serialize_min_hash(string_columns)
+    serialize_min_hash(string_columns)
     minhash1 = deserialize_minhash(string_columns[0])
     minhash2 = deserialize_minhash(string_columns[1])
     print(minhash1.jaccard(minhash2))
