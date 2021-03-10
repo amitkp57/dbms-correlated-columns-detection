@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from google.cloud import bigquery
 
-client = bigquery.Client(project='amit-pradhan-compute')
+client = bigquery.Client(project='introdb-303217')
 
 # We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
@@ -43,6 +43,26 @@ def get_columns(column_type, limit=10000):
     for table, columns in table_columns.items():
         for column in columns:
             if column['type'] == column_type:
+                output.append({'table': table.replace(':', '.'), 'column': column['name']})
+    return output[:limit]
+
+
+def get_columns_exclude(column_type, limit=10000):
+    """
+    Get the list of columns of the given type. Size of returned columns will be limited by given limit value.
+    @param column_type:
+    @param limit:
+    """
+    if column_type not in COLUMN_TYPES:
+        raise ValueError(f'{column_type} is not a valid type for correlation finding!')
+
+    with open(f'{os.environ["WORKING_DIRECTORY"]}/data/columns.json') as file:
+        table_columns = json.load(file)
+
+    output = []
+    for table, columns in table_columns.items():
+        for column in columns:
+            if column['type'] != column_type:
                 output.append({'table': table.replace(':', '.'), 'column': column['name']})
     return output[:limit]
 
