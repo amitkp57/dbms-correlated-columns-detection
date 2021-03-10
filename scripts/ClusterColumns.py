@@ -138,6 +138,7 @@ def serialize_min_hash(columns):
         with open(f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt',
                   'wb') as file:
             file.write(buf)
+            print(f'Serialization is complete for {column["table"]}.{column["column"]}.')
     return
 
 
