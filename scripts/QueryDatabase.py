@@ -116,9 +116,10 @@ def transform_columns(dt, columns):
     for column in columns:
         column_name = column['column']
         if column['type'] in ['DATE', 'DATETIME', 'TIMESTAMP']:
-            dt[column_name] = pd.to_datetime(dt[column_name]).astype('int64')
+            # default to epoch start time
+            dt[column_name] = pd.to_datetime(dt[column_name]).fillna(pd.to_datetime('1970-01-01')).astype('int64')
         elif column['type'] in ['BOOLEAN']:
-            dt[column_name] = dt[column_name].astype('int64')
+            dt[column_name] = dt[column_name].fillna(False).astype('int64')
     return dt
 
 
@@ -210,8 +211,7 @@ def main():
     # print(get_columns('STRING'))
     # print(len(get_column_values('bigquery-public-data.covid19_aha.hospital_beds', 'state_name')))
     # print(get_table_columns('bigquery-public-data.covid19_ecdc.covid_19_geographic_distribution_worldwide'))
-    save_table_column_values('bigquery-public-data.covid19_italy.data_by_province',
-                             sample_size=10)
+    save_table_column_values('bigquery-public-data.covid19_nyt.excess_deaths')
 
 
 if __name__ == '__main__':
