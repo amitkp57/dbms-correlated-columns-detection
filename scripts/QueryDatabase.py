@@ -8,7 +8,7 @@ from collections import defaultdict
 from google.cloud import bigquery
 
 # We will find correlations only among the below types of columns
-COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN']
+COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN', 'GEOGRAPHY']
 
 
 def get_columns(limit=10000):
@@ -46,14 +46,15 @@ def get_columns(column_type, limit=10000):
     return output[:limit]
 
 
-def get_columns_exclude(column_type, limit=10000):
+def get_columns_exclude(column_types, limit=10000):
     """
     Get the list of columns while excluding the given type. Size of returned columns will be limited by given limit value.
     @param column_type:
     @param limit:
     """
-    if column_type not in COLUMN_TYPES:
-        raise ValueError(f'{column_type} is not a valid type for correlation finding!')
+    for column_type in column_types:
+        if column_type not in COLUMN_TYPES:
+            raise ValueError(f'{column_type} is not a valid type for correlation finding!')
 
     with open(f'{os.environ["WORKING_DIRECTORY"]}/data/columns.json') as file:
         table_columns = json.load(file)
@@ -78,6 +79,29 @@ def get_all_column_types():
         for column in columns:
             output[column['type']] += 1
     return output
+
+
+def get_columns_values(table_name, columns, sampling=0):
+    """
+    Returns the list of column values from the table
+    @param table_name:
+    @param column:
+    @return:
+    """
+    if sampling > 0:
+        # query row count
+        row_count = client.query('''
+            SELECT
+              COUNT(*) as total
+            FROM `%s`''' % table_name).to_dataframe().total[0]
+        if row_count > sampling:
+            query = f'''select {",".join(columns)} from `{table_name}` where RAND() < {sampling}/{row_count}'''
+        else:
+            query = f'''select {",".join(columns)} from `{table_name}`'''
+    else:
+        query = f'''select {",".join(columns)} from `{table_name}`'''
+    results = client.query(query).result().to_dataframe().to_numpy(na_value=0).astype('float32').transpose()
+    return results
 
 
 def get_column_values(table_name, column):
