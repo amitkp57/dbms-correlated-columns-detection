@@ -132,7 +132,7 @@ def serialize_min_hash(columns, override=False):
         output_file = f'{os.environ["WORKING_DIRECTORY"]}/results/minhashes/{column["table"]}.{column["column"]}.txt'
         if os.path.isfile(output_file) and not override:
             continue
-        values = queryDatabase.get_distnct_column_values(column['table'], column['column'])
+        values = queryDatabase.get_distnct_column_values(column['table'], column)
         tokens = tokenize(values)
         minhash = MinHash(num_perm=NUM_PERM)
         for token in tokens:
