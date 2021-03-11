@@ -179,29 +179,33 @@ def get_distnct_column_values(table_name, column):
     return results.to_numpy().ravel()
 
 
-def save_table_column_values(table, sample_size=100000):
+def save_table_column_values(table, sample_size=100000, override=False):
     """
     Queries Google bigquery to randomly sample values of the given sample size and saves locally
+    @param override:
     @param table:
     @param sample_size:
     @return:
     """
-    columns = get_table_columns(table, exclude_types=['GEOGRAPHY'])
-    result = get_columns_values(table, columns, sample_size)
-    with open(f'{os.environ["WORKING_DIRECTORY"]}/data/tables/' + table + '.npy', 'wb') as file:
-        np.save(file, result)
+    file_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/table.npy'
+    if override or not os.path.isfile(file_path):
+        columns = get_table_columns(table, exclude_types=['GEOGRAPHY'])
+        result = get_columns_values(table, columns, sample_size)
+        with open(file_path, 'wb') as file:
+            np.save(file, result)
     return
 
 
-def save_all_table_data(sample_size=100000):
+def save_all_table_data(override=False, sample_size=100000):
     """
     Saves all table data locally
+    @param override:
     @param sample_size:
     @return:
     """
     tables = MetaData.get_tables(f'{os.environ["WORKING_DIRECTORY"]}/data/datasets.txt')
     for table in tables:
-        save_table_column_values(table.replace(':', '.'), sample_size)
+        save_table_column_values(table.replace(':', '.'), sample_size=sample_size, override=override)
     return
 
 
