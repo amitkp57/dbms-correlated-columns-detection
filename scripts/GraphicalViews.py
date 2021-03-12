@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -5,7 +7,7 @@ import pandas as pd
 plt.style.use('ggplot')
 
 
-def plot(corr_2d, corr_th=0.8):
+def plot(plot_name, corr_2d, corr_th=0.8):
     # params
     mat_len = len(corr_2d)
     corr_mat = corr_2d  # input correlation matrix
@@ -67,7 +69,8 @@ def plot(corr_2d, corr_th=0.8):
                 ax.text(j, i, '%.2f' % corr_2d[i][j], ha='center', va='center',
                         color='r')
     cbar = ax.figure.colorbar(im, ax=ax, format='% .2f')
-    plt.show()
+    # plt.show()
+    plt.savefig(f'{os.environ["WORKING_DIRECTORY"]}/results/{plot_name}.png')
     return
 
 
