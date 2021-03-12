@@ -192,9 +192,10 @@ def save_table_column_values(table, sample_size=100000, override=False):
     file_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table}.npy'
     if override or not os.path.isfile(file_path):
         columns = get_table_columns(table, exclude_types=['GEOGRAPHY', 'STRING'])
-        result = get_columns_values(table, columns, sample_size)
-        with open(file_path, 'wb') as file:
-            np.save(file, result)
+        if len(columns) > 0:
+            result = get_columns_values(table, columns, sample_size)
+            with open(file_path, 'wb') as file:
+                np.save(file, result)
     return
 
 
