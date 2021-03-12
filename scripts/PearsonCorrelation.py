@@ -17,16 +17,19 @@ def get_table_values(sample_size=10000):
     tables = MetaData.get_tables(f'{os.environ["WORKING_DIRECTORY"]}/data/datasets.txt')
     columns = []
     table_names = []
+    count = 0
     for table in tables:
         table_name = table.replace(":", ".")
         table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
         with open(table_path, 'rb') as file:
             table_data = np.load(file, allow_pickle=True)
             if table_data.shape[0] > sample_size:
-                table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
+                table_data = table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
             for col in table_data:
                 columns.append(col)
                 table_names.append(table_name)
+            count += 1
+            print(f'Loaded {count} tables.')
     return columns
 
 
