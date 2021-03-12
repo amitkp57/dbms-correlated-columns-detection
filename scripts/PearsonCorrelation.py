@@ -13,6 +13,7 @@ from scripts import MetaData
 def get_table_values(override=False, sample_size=10000):
     """
     Returns an array of column values of given sample size
+    @type override: object
     @return:
     """
     column_val_path = f'{os.environ["WORKING_DIRECTORY"]}/results/sampled_columns.obj'
@@ -52,13 +53,14 @@ def get_table_values(override=False, sample_size=10000):
     return columns, table_names
 
 
-def calculate_pearson_correlation(sample_size=10000, num_permutations=10):
+def calculate_pearson_correlation(override=False, sample_size=10000, num_permutations=10):
     """
     Calculate Pearson correlation for each column combination
+    @param override:
     @param sample_size:
     @param num_permutations:
     """
-    columns, table_names = get_table_values(sample_size=sample_size)
+    columns, table_names = get_table_values(override=override, sample_size=sample_size)
     corr_matrix = np.zeros((len(columns), len(columns)))
     count = 0
     for i in range(len(columns)):
@@ -79,19 +81,22 @@ def calculate_pearson_correlation(sample_size=10000, num_permutations=10):
                 correlation = stats.pearsonr(col_i, col_j)[0]
             corr_matrix[i][j] = correlation
             count += 1
-            print(f'Completed {count} correlation calculations.')
+            if count % 10000 == 0:
+                print(f'Completed {count} correlation calculations.')
 
     return corr_matrix
 
 
-def save_corr_matrix(sample_size=10000, num_permutations=10):
+def save_corr_matrix(override=False, sample_size=10000, num_permutations=10):
     """
     Saves correlation matrix locally
+    @param override:
     @param sample_size:
     @param num_permutations:
     @return:
     """
-    corr_matrix = calculate_pearson_correlation(sample_size=sample_size, num_permutations=num_permutations)
+    corr_matrix = calculate_pearson_correlation(override=override, sample_size=sample_size,
+                                                num_permutations=num_permutations)
     np.savez(f'{os.environ["WORKING_DIRECTORY"]}/results/corr_matrix.npz', corr_matrix=corr_matrix)
     return corr_matrix
 
@@ -106,7 +111,7 @@ def get_corr_matrix(override=False, sample_size=10000, num_permutations=10):
     """
     file_path = f'{os.environ["WORKING_DIRECTORY"]}/results/corr_matrix.npz'
     if override or not os.path.isfile(file_path):
-        corr_matrix = save_corr_matrix(sample_size=sample_size, num_permutations=num_permutations)
+        corr_matrix = save_corr_matrix(override=override, sample_size=sample_size, num_permutations=num_permutations)
     else:
         corr_matrix = np.load(file_path)['corr_matrix']
     return corr_matrix
