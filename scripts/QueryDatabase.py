@@ -9,9 +9,9 @@ import numpy as np
 import pandas as pd
 from google.cloud import bigquery
 
-# We will find correlations only among the below types of columns
 from scripts import MetaData
 
+# We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN', 'GEOGRAPHY']
 
 
@@ -134,6 +134,16 @@ def get_columns_values(table_name, columns, sampling=0):
     """
     column_names = list(map(lambda column: column['column'], columns))
     client = bigquery.Client(project='introdb-303217')
+
+              
+def get_columns_values(table_name, columns, sampling=0):
+    """
+    Returns the list of column values from the table
+    @param table_name:
+    @param column:
+    @return:
+    """
+
     if sampling > 0:
         # query row count
         row_count = client.query('''
