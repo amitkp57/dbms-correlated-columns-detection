@@ -25,7 +25,7 @@ def get_table_values(sample_size=10000):
             table_data = np.load(file, allow_pickle=True)
             if table_data.shape[0] > sample_size:
                 table_data = table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
-            for col in np.tranpose(table_data):
+            for col in np.transpose(table_data):
                 columns.append(col)
                 table_names.append(table_name)
             count += 1
