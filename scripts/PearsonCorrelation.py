@@ -22,7 +22,7 @@ def get_table_values(sample_size=10000):
         table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
         with open(table_path, 'rb') as file:
             table_data = np.load(file, allow_pickle=True)
-            if len(table_data.shape[0] > sample_size):
+            if table_data.shape[0] > sample_size:
                 table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
             for col in table_data:
                 columns.append(col)
