@@ -21,7 +21,7 @@ def get_table_values(sample_size=10000):
         table_name = table.replace(":", ".")
         table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
         with open(table_path, 'rb') as file:
-            table_data = np.load(file)
+            table_data = np.load(file, allow_pickle=True)
             table_data[np.random.choice(table_data.shape[0], sample_size, replace=False)]
             for col in table_data:
                 columns.append(col)
