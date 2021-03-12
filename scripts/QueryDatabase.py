@@ -127,23 +127,13 @@ def transform_columns(dt, columns):
 
 def get_columns_values(table_name, columns, sampling=0):
     """
-    Returns the list of column values for multiple columns from the table
-    @param table_name:
-    @param columns:
-    @return:
-    """
-    column_names = list(map(lambda column: column['column'], columns))
-    client = bigquery.Client(project='introdb-303217')
-
-              
-def get_columns_values(table_name, columns, sampling=0):
-    """
     Returns the list of column values from the table
     @param table_name:
     @param column:
     @return:
     """
-
+    client = bigquery.Client(project='introdb-303217')
+    column_names = list(map(lambda column: column['column'], columns))
     if sampling > 0:
         # query row count
         row_count = client.query('''
@@ -228,7 +218,8 @@ def main():
     # print(get_columns('STRING'))
     # print(len(get_column_values('bigquery-public-data.covid19_aha.hospital_beds', 'state_name')))
     # print(get_table_columns('bigquery-public-data.covid19_ecdc.covid_19_geographic_distribution_worldwide'))
-    save_table_column_values('bigquery-public-data.covid19_geotab_mobility_impact.lookup_region', sample_size=10000, override=True)
+    save_table_column_values('bigquery-public-data.covid19_geotab_mobility_impact.lookup_region', sample_size=10000,
+                             override=True)
 
 
 if __name__ == '__main__':
