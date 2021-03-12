@@ -30,7 +30,7 @@ def get_table_values(sample_size=10000):
                 table_names.append(table_name)
             count += 1
             print(f'Loaded {count} tables.')
-    return columns
+    return columns, table_names
 
 
 def calculate_pearson_correlation(sample_size=10000, num_permutations=10):
