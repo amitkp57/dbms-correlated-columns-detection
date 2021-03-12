@@ -30,7 +30,7 @@ def get(url):
     """
     Makes a REST GET call to the given url and returns response
     """
-    params = {'key': 'AIzaSyDjMXUNSD1-1_oxT2hk5Ow4uaPg0IeCBck'}
+    params = {'key': 'AIzaSyCIkzCe8fd_8roPjePi_t_kKVBX-aOCwYM'}
     bearer = get_auth_token()
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8',
                'Authorization': 'Bearer ' + bearer}
