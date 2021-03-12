@@ -40,7 +40,7 @@ def get_table_values(override=False, sample_size=10000):
             if table_data.shape[0] > sample_size:
                 table_data = table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
             for col in np.transpose(table_data):
-                columns.append(col.arr.astype('float64'))
+                columns.append(col.astype('float64'))
                 table_names.append(table_name)
             count += 1
             print(f'Loaded {count} tables.')
