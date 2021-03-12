@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import pickle
 
 import numpy as np
 from scipy import stats
@@ -9,11 +10,20 @@ from scipy import stats
 from scripts import MetaData
 
 
-def get_table_values(sample_size=10000):
+def get_table_values(override=False, sample_size=10000):
     """
     Returns an array of column values of given sample size
     @return:
     """
+    column_val_path = f'{os.environ["WORKING_DIRECTORY"]}/results/sampled_columns.obj'
+    table_names_path = f'{os.environ["WORKING_DIRECTORY"]}/results/table_names.obj'
+    if not override and os.path.isfile(column_val_path) and os.path.isfile(table_names_path):
+        with open(column_val_path, 'rb') as file:
+            columns = pickle.load(file)
+        with open(table_names_path, 'rb') as file:
+            table_names = pickle.load(file)
+        return columns, table_names
+
     tables = MetaData.get_tables(f'{os.environ["WORKING_DIRECTORY"]}/data/datasets.txt')
     columns = []
     table_names = []
@@ -30,6 +40,12 @@ def get_table_values(sample_size=10000):
                 table_names.append(table_name)
             count += 1
             print(f'Loaded {count} tables.')
+
+    with open(column_val_path, 'wb') as file:
+        pickle.dump(columns, file)
+    with open(table_names_path, 'wb') as file:
+        pickle.dump(table_names, file)
+
     return columns, table_names
 
 
