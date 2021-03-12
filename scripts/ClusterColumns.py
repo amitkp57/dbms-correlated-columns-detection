@@ -4,6 +4,7 @@ import pathlib
 import pickle
 
 import numpy as np
+import pandas as pd
 from datasketch import MinHashLSHForest, MinHash, MinHashLSH, LeanMinHash
 
 import scripts.QueryDatabase as queryDatabase
@@ -98,14 +99,14 @@ def get_all_similar_columns(minhash_lsh, column):
     return minhash_lsh.query(minhash)
 
 
-def calculate_jaccard_similarity(columns, override=False):
+def calculate_jaccard_similarity(override=False):
     """
     Calculates Jaccrd similarity between all pairs of columns
     @type override: 
-    @param columns:
     @return:
     """
-    file_path = f'{os.environ["WORKING_DIRECTORY"]}/results/similarity_all.npz'
+    columns = queryDatabase.get_columns('STRING')
+    file_path = f'{os.environ["WORKING_DIRECTORY"]}/results/jaccard.obj'
     if override or not os.path.isfile(file_path):
         minhash_list = []
         for column in columns:
@@ -115,10 +116,17 @@ def calculate_jaccard_similarity(columns, override=False):
         for i in range(n):
             for j in range(n):
                 matrix[i][j] = minhash_list[i].jaccard(minhash_list[j])
-        np.savez(file_path, similarity=matrix)
-        return matrix
-    matrix = np.load(file_path)['similarity']
-    return matrix
+        df = pd.DataFrame(matrix)
+        column_names = list(map(lambda column: column['table'] + "." + column['column'], columns))
+        df.columns = column_names
+        df.index = column_names
+        with open(file_path, 'wb') as file:
+            pickle.dump(df, file)
+        return df
+
+    with open(file_path, 'rb') as file:
+        df = pickle.load(file)
+    return df
 
 
 def serialize_min_hash(columns, override=False):

@@ -145,7 +145,7 @@ def get_pandas_correlation(override=False):
     @param override:
     @return:
     """
-    file_path = f'{os.environ["WORKING_DIRECTORY"]}/data/results/pandas_correlation.obj'
+    file_path = f'{os.environ["WORKING_DIRECTORY"]}/results/pandas_correlation.obj'
     if not override and os.path.isfile(file_path):
         with open(file_path, 'rb') as file:
             correlations = pickle.load(file)
