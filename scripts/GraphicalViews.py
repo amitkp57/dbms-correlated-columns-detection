@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import scripts.QueryDatabase as qd
-
 plt.style.use('ggplot')
 
 
@@ -45,12 +43,12 @@ def plot(corr_2d, corr_th=0.8):
         len_j = len(th_j)
 
         for i in th_i:
-            col_names_i.append('%s.%s' % (column_names[i]['table'][21:], column_names[i]['column']))
+            col_names_i.append(column_names[i])
         for j in th_j:
-            col_names_j.append('%s.%s' % (column_names[j]['table'][21:], column_names[j]['column']))
+            col_names_j.append(column_names[j])
     else:
         for i in range(len_i):
-            col_names_i.append('%s.%s' % (column_names[i]['table'][21:], column_names[i]['column']))
+            col_names_i.append(column_names[i])
         col_names_j = col_names_i
 
     plt.rcParams["figure.figsize"] = (len_j / 3, len_i / 3)  # image size
