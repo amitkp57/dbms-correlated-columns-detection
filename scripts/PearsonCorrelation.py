@@ -5,9 +5,10 @@ import pathlib
 import pickle
 
 import numpy as np
+import pandas as pd
 from scipy import stats
 
-from scripts import MetaData
+from scripts import MetaData, QueryDatabase
 
 
 def get_table_values(override=False, sample_size=10000):
@@ -115,6 +116,44 @@ def get_corr_matrix(override=False, sample_size=10000, num_permutations=10):
     else:
         corr_matrix = np.load(file_path)['corr_matrix']
     return corr_matrix
+
+
+def calculate_pandas_correlation():
+    """
+    Calculates Pearson correlation values for each column combination using pandas dataframe
+    @return: 
+    """
+    tables = MetaData.get_tables(f'{os.environ["WORKING_DIRECTORY"]}/data/datasets.txt')
+    dfs = []
+    for table in tables:
+        table_name = table.replace(":", ".")
+        table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
+        if not os.path.isfile(table_path):
+            print(f'table {table_name} does not have numeric columns.')
+            continue
+        with open(table_path, 'rb') as file:
+            columns = QueryDatabase.get_table_columns(table_name, exclude_types=['GEOGRAPHY', 'STRING'])
+            column_names = list(map(lambda column: column['table'] + "." + column['column'], columns))
+            dfs.append(pd.DataFrame(np.load(file, allow_pickle=True), columns=column_names))
+    df = pd.concat(dfs, axis=1)
+    return df.corr(method='pearson')
+
+
+def get_pandas_correlation(override=False):
+    """
+    Get pandas correlation matrix
+    @param override:
+    @return:
+    """
+    file_path = f'{os.environ["WORKING_DIRECTORY"]}/data/results/pandas_correlation.obj'
+    if not override and os.path.isfile(file_path):
+        with open(file_path, 'rb') as file:
+            correlations = pickle.load(file)
+        return correlations
+    correlations = calculate_pandas_correlation()
+    with open(file_path, 'wb') as file:
+        pickle.dump(correlations, file)
+    return correlations
 
 
 def main():
