@@ -22,7 +22,8 @@ def get_table_values(sample_size=10000):
         table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
         with open(table_path, 'rb') as file:
             table_data = np.load(file, allow_pickle=True)
-            table_data[np.random.choice(table_data.shape[0], sample_size, replace=False)]
+            if len(table_data.shape[0] > sample_size):
+                table_data[np.random.default_rng().choice(table_data.shape[0], sample_size, replace=False)]
             for col in table_data:
                 columns.append(col)
                 table_names.append(table_name)
@@ -49,8 +50,8 @@ def calculate_pearson_correlation(sample_size=10000, num_permutations=10):
             if table_name_i != table_name_j:
                 correlation = 0
                 for _ in range(num_permutations):
-                    col_i = col_i[np.random.sample(col_i.shape[0], min(len_i, len_j), replace=False)]
-                    col_j = col_j[np.random.sample(col_j.shape[0], min(len_i, len_j), replace=False)]
+                    col_i = col_i[np.random.default_rng().choice(col_i.shape[0], min(len_i, len_j), replace=False)]
+                    col_j = col_j[np.random.default_rng().choice(col_j.shape[0], min(len_i, len_j), replace=False)]
                     correlation = max(correlation, stats.pearsonr(col_i, col_j))
             else:
                 correlation = stats.pearsonr(col_i, col_j)
