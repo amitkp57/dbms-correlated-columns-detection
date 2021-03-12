@@ -218,7 +218,7 @@ def main():
     # print(get_columns('STRING'))
     # print(len(get_column_values('bigquery-public-data.covid19_aha.hospital_beds', 'state_name')))
     # print(get_table_columns('bigquery-public-data.covid19_ecdc.covid_19_geographic_distribution_worldwide'))
-    save_table_column_values('bigquery-public-data.new_york_citibike.citibike_stations', sample_size=10000)
+    save_table_column_values('bigquery-public-data.covid19_geotab_mobility_impact.lookup_region', sample_size=10000, override=True)
 
 
 if __name__ == '__main__':

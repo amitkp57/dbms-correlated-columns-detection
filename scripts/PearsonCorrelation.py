@@ -31,6 +31,9 @@ def get_table_values(override=False, sample_size=10000):
     for table in tables:
         table_name = table.replace(":", ".")
         table_path = f'{os.environ["WORKING_DIRECTORY"]}/data/tables/{table_name}.npy'
+        if not os.path.isfile(table_path):
+            print(f'table {table_name} does not have numeric columns.')
+            continue
         with open(table_path, 'rb') as file:
             table_data = np.load(file, allow_pickle=True)
             if table_data.shape[0] > sample_size:
