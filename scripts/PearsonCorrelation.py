@@ -73,8 +73,8 @@ def calculate_pearson_correlation(sample_size=10000, num_permutations=10):
                     col_j = col_j[np.random.default_rng().choice(col_j.shape[0], min(len_i, len_j), replace=False)]
                     correlation = max(correlation, stats.pearsonr(col_i, col_j)[0])
             else:
-                correlation = stats.pearsonr(col_i, col_j)
-            corr_matrix[i][j] = correlation[0]
+                correlation = stats.pearsonr(col_i, col_j)[0]
+            corr_matrix[i][j] = correlation
             count += 1
             print(f'Completed {count} correlation calculations.')
 
