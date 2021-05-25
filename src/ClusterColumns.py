@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from datasketch import MinHashLSHForest, MinHash, MinHashLSH, LeanMinHash
 
-import scripts.QueryDatabase as queryDatabase
+import src.QueryDatabase as queryDatabase
 
 NUM_PERM = 128
 

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from scripts import MetaData, QueryDatabase
+from src import MetaData, QueryDatabase
 
 
 def get_table_values(override=False, sample_size=10000):

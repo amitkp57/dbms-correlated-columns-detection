@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from google.cloud import bigquery
 
-from scripts import MetaData
+from src import MetaData
 
 # We will find correlations only among the below types of columns
 COLUMN_TYPES = ['STRING', 'INTEGER', 'DATE', 'FLOAT', 'DATETIME', 'TIMESTAMP', 'NUMERIC', 'BOOLEAN', 'GEOGRAPHY']

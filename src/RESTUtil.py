@@ -32,8 +32,10 @@ def get(url):
     """
     params = {'key': 'AIzaSyCIkzCe8fd_8roPjePi_t_kKVBX-aOCwYM'}
     bearer = get_auth_token()
-    headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8',
-               'Authorization': 'Bearer ' + bearer}
+    headers = {
+        'content-type': 'application/json', 'Accept-Charset': 'UTF-8',
+        'Authorization': 'Bearer ' + bearer
+    }
     # print(url, headers)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()

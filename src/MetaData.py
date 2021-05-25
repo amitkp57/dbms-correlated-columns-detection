@@ -2,8 +2,8 @@ import json
 import os
 import pathlib
 
-import scripts.Constants as Constants
-import scripts.RESTUtil as RESTUtil
+import src.Constants as Constants
+import src.RESTUtil as RESTUtil
 
 
 # Run this file to regenerate meta-data files in the /data folder
