@@ -1,4 +1,4 @@
-# Jupyter
+# jupyter
 
 ## Detecting correlated columns in DBMS systems
 
